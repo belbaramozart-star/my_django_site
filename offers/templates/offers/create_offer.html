@@ -1,0 +1,42 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'offers/css/tagify.css' %}">
+{% endblock extra_css %}
+{% block content %}
+    <div class="container">
+        <h1>Publier une Nouvelle Offre</h1>
+        <p>Pour l'entreprise : <strong>{{ company_profile.nom_entreprise }}</strong></p>
+        
+        <hr>
+        
+        <form method="post" action="{% url 'offers:create_offer' %}" enctype="multipart/form-data">
+            {% csrf_token %} 
+            {{ form.non_field_errors }} 
+            {% for field in form %}
+                {% if field.name != 'required_skills' %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    <hr>
+                {% endif %}
+            {% endfor %}
+
+            <div class="form-group">
+                <label for="{{ form.required_skills.id_for_label }}">{{ form.required_skills.label }}</label>
+                {{ form.required_skills }}
+            </div>
+            <hr>
+            <input type="submit" value = "Publier l'Offre" class="btn btn-success">
+        </form>
+    </div>
+    <script src="{% static 'offers/js/bundle.js' %}"></script>
+        
+    <p class="mt-3">
+        <a href="{% url 'accounts:company_dashboard' %}">Annuler et Retour au Tableau de Bord</a>
+    </p>
+{% endblock content %}
+    
+
+

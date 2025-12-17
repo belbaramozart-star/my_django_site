@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Board Africain</title>
+    {# On va ajouter un blic pour les styles spécifiques à chaque page #}
+    {% block extra_css %}
+    {% endblock extra_css %}
+    </head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="{% url 'core:index' %}" class="logo">Job Board</a>
+
+            <div class="nav-links">
+                <a href="{% url 'offers:offer_list' %}">Offres d'Emploi & Stage</a>
+                <br/>
+
+                {% if user.is_authenticated %}
+                    
+                    {% if user.user_type == 'CANDIDAT' %}
+                        <a href="{% url 'applications:candidate_dashboard' %}">Mon Tableau de Bord</a><br/>
+                        <a href="{% url 'accounts:update_profile' %}" class="btn btn-secondary">Mon Profil</a><br/>
+                    
+                    {% elif user.user_type == 'COMPANY' %}
+                        <a href="{% url 'accounts:company_dashboard' %}">Tableau de Bord Recruteur</a>
+                        <a href="{% url 'offers:create_offer' %}" class="btn btn-success">Publier une Offre</a><br/>
+                        <a href="{% url 'accounts:update_profile' %}" class="btn btn-secondary">Mon Profil Entreprise</a><br/>
+                    
+                    {% else %}
+                        <a href="{% url 'accounts:update_profile' %}">Profil</a>
+                    {% endif %}
+
+                    <span>Bienvenue, {{ user.get_full_name|default:user.email }}</span>
+                    <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Déconnexion</button>
+                    </form>
+
+                {% else %}
+                    
+                    <a href="{% url 'accounts:login' %}" class="btn btn-primary">Se Connecter</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-outline">S'inscrire</a>
+                
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Job Board Africain. Tous droits réservés.</p>
+    </footer>
+    {% block extra_js %}
+    {% endblock extra_js %}
+</body>
+</html>

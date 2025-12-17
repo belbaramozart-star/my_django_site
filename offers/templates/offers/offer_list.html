@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Liste des Offres d'Emploi & Stages ({{ offers.count }})</h1>
+    {% for offer in offers %}
+        <div class="card offer-card">
+            <h2>{{ offer.titre }}</h2>
+            <p><strong>Entreprise: </strong>{{ offer.company.nom_entreprise }}</p>
+            <p><strong>Type: </p>{{ offer.contract_type }}</strong>
+            <p><strong>Localisation: </strong>{{ offer.localisation }}</p>
+            <p><strong>Rémunération</strong>
+                {% if offer.remuneration %}
+                    {{ offer.remuneration }}</p> £
+                {% else %}
+                    Non spécifiée
+                {% endif %}
+                </p>
+            <p><strong>Date Limite: </strong>{{ offer.date_expiration|date:"d F Y" }}</p>
+            <a href="{% url 'offers:offer_detail' offer.pk %}">Voir les résultats</a>
+        </div>
+        <hr>
+        {% empty %}
+        <p>Aucune offre active n'est disponible pour le moment.</p>
+    {% endfor %}
+
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.nexg_page_number }}">Suivant</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock content %}

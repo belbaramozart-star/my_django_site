@@ -1,0 +1,22 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+    <h1>Mise à Jour de votre Profil {{ user_type_label }}</h1>
+    
+    <hr>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        <input type="submit" value = "Enregistrer les Modifications" class="btn btn-success">
+    </form>
+
+    <p class="mt-3">
+        {% if user_type_label == "Candidat" %}
+            <a href="{% url 'applications:candidate_dashboard' %}">Retour au Tableau de Bord</a>
+        {% elif user_type_label == "Entreprise" %}
+            <a href="{% url 'accounts:company_dashboard' %}">Retour au Tableau de Bord</a>
+        {% endif %}
+    </p>
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+    <h1>Tableau de Bord Candidat</h1>
+    <p>Bienvenue, {{ request.user.email }} !</p>
+
+    <hr>
+    
+    <h2>Historique des Candidatures ({{ candidatures.count }})</h2>
+
+    {% if candidatures %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Offre</th>
+                    <th>Date de Soumission</th>
+                    <th>Statut Actuel</th>
+                    <th>Détails</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in candidatures %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'offers:offer_detail' app.offer.pk %}">
+                                {{ app.offer.titre }} chez {{ app.offer.company.nom_entreprise }}
+                            </a>
+                        </td>
+                        <td>{{ app.date_soumission|date:"d F Y" }}</td>
+                        <td>
+                            <strong>{{ app.get_statut_display }}</strong>
+                        </td>
+                        <td>
+                            <a href="#">Voir le suivi</a> 
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            Vous n'avez soumis aucune candidature pour l'instant. 
+            <a href="{% url 'offers:offer_list' %}">Parcourez les offres disponibles !</a>
+        </div>
+    {% endif %}
+
+{% endblock content %}

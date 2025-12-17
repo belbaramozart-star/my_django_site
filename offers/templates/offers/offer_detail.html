@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="offer-header">
+        <h1>{{ offer.titre }}</h1>
+        <p class="company-name">Publié par: <strong>{{ offer.company.nom_entreprise }}</strong> à {{ offer.localisation }}</p>
+    </div>
+    <hr>
+    <div class="offer-details">
+        <h3>Détails de l'opportunité</h3>
+        <ul>
+            <li><strong>Type: </strong>{{ offer.offer_type.nom }}</li>
+            <li><strong>Contract: </strong>{{ offer.contract_type }}</li>
+            <li><strong>Rémunération: </strong>
+                {% if offer.remuneration %}
+                    {{ offer.remuneration }}</p> £
+                {% else %}
+                    Non spécifiée
+                {% endif %}
+            </li>
+            <li><strong>Publié le: </strong>{{ offer.date_publication|date:"d F Y" }}</li>
+            <li><strong>Date Limite: </strong>**{{ offer.date_expiration|date:"d F Y" }}**</li>
+        </ul>
+
+        {% if offer.required_skills.all %}
+            <h3>Compétences Requises: </h3>
+            <p>{% for skill in offer.required_skills.all %}
+                <span class="skill-tag">{{ skill.nom }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}
+            </p>
+            <h3>Description du Poste</h3>
+            <p>{{ offer.description|linebreaksbr }}</p>
+
+            <h3>Exigences et Profil Recherché</h3>
+            <p>{{ offer.exigences|linebreaksbr }}</p>
+
+        {% endif %}
+    </div>
+    
+    <hr>
+    
+    <div class="apply-section">
+        {% if offer.is_active and offer.date_expiration|date:"Ymd" >= "now"|date:"Ymd" %}
+            <a href="{% url 'applications: apply_to_offer' offer.pk %}" class="btn btn-primary">Postuler à cette offre</a>
+        {% endif %}
+    </div>
+{% endblock content %}

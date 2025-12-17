@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset ="utf-8">
+        <title>Acceuil</title>
+    </head>
+    <body>
+        
+        {% if user.is_authenticated %}
+            <p>Connecté sous {{ user.username }} | <a href="{% url 'accounts:logout' %}">Déconnexion</a></p>
+            {% if user.user_type == 'CANDIDAT' %}
+                <a href="{% url 'applications:candidate_dashboard' %}">Mon Tableau de Bord</a><br/>
+                <a href="{% url 'accounts:update_profile' %}" class="btn btn-secondary">Mon Profil</a><br/>
+                    
+            {% elif user.user_type == 'ENTREPRISE' %}
+                <a href="{% url 'accounts:company_dashboard' %}">Tableau de Bord Recruteur</a><br/>
+                <a href="{% url 'offers:create_offer' %}" class="btn btn-success">Publier une Offre</a><br/>
+                <a href="{% url 'accounts:update_profile' %}" class="btn btn-secondary">Mon Profil Entreprise</a><br/>
+
+            {% endif %}
+            
+        {% else %}
+                <p><a href="{% url 'accounts:login' %}">Connexion</a> | <br/><br/>
+                <a href="{% url 'accounts:register' user_type='candidat' %}">Inscription Candidat</a>
+                <a href="{% url 'accounts:register' user_type='entreprise' %}">Inscription Entreprise</a></p>
+
+        {% endif %}
+        
+        <h1>Bienvenue sur Acceuil</h1>
+
+
+        <a href="{% url 'core:contact'%}">Contact</a>
+    </body>
+</html>
+<></>

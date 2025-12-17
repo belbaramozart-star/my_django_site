@@ -1,0 +1,56 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+    <h1>Tableau de Bord Recruteur</h1>
+    <h2>{{ company_profile.nom_entreprise }}</h2>
+
+    <hr>
+    
+    <div class="summary-cards">
+        <div class="card">
+            <h3>Offres Actives</h3>
+            <p class="count">{{ published_offers.count }}</p>
+            <a href="#">Gérer les offres</a>
+        </div>
+        
+        <div class="card">
+            <h3>Candidatures Totales</h3>
+            <p class="count">{{ total_applications_received }}</p>
+            <a href="#">Voir toutes les candidatures</a>
+        </div>
+        
+        <div class="card">
+            <h3>En Attente de Revue</h3>
+            <p class="count">{{ pending_applications_count }}</p>
+        </div>
+    </div>
+    
+    <hr>
+    
+    <h2>Actions Rapides</h2>
+    <p>
+        <a href="{% url 'offers:create_offer' %}" class="btn btn-primary">
+            + Publier une Nouvelle Offre
+        </a>
+        <a href="{% url 'accounts:update_profile' %}" class="btn btn-secondary">
+            Modifier mon Profil Entreprise
+        </a>
+    </p>
+
+    <hr>
+
+    <h2>Vos Dernières Offres Publiées</h2>
+    {% if published_offers %}
+        <ul>
+            {% for offer in published_offers|slice:":5" %}
+                <li>
+                    <strong>{{ offer.titre }}</strong> - {{ offer.applications.count }} Candidatures (
+                    <a href="{% url 'offers:manage_applications' offer_pk=offer.pk %}">Gérer</a>)
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune offre n'a encore été publiée. Commencez maintenant !</p>
+    {% endif %}
+
+{% endblock content %}
