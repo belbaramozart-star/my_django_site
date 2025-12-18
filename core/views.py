@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 
 def index(request):
-    context = {'messsage': 'Hello world'}
+    context = {'message': 'Hello world'}
     return render(request, "core/index.html", context)
 
 def contact(request):
