@@ -5,5 +5,5 @@ app_name = "core"
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('contacter/', views.contact, name="contact"),
+    path('contact/', views.contact, name="contact"),
 ]
